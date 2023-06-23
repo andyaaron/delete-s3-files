@@ -12,10 +12,10 @@ def check_s3_object_key_in_json(s3_object_key, json_objects_file):
         json_data = json.load(file)
 
     for obj in json_data:
-        if obj['guid'] in s3_object_key:
-            return True
+        if obj['guid'] not in s3_object_key:
+            return False
 
-    return False
+    return True
 
 
 # Set the s3 objects to private,
@@ -59,7 +59,7 @@ def compare_s3_objects_with_json(bucket_name, prefix, json_objects, output_file)
                     s3_object_key = obj['Key']
                     # Check if the S3 object key is in our json file
                     if check_s3_object_key_in_json(s3_object_key, json_objects):
-                         # Write the s3 object key to our array
+                        # Write the s3 object key to our array
                         matched_objs.append(s3_object_key)
                         print('Setting to private: ' + s3_object_key)
                 # change ACL to private
